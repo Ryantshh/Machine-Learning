@@ -1,0 +1,31 @@
+DATASET DESCRIPTION
+*******************
+#FEATURES#
+AT=Engine Temperature
+V=Exhaust Vacumnn
+AP=Ambient Pressure
+RH= Relative Humitdity 
+#Dependent Variable#
+PE=Energy Output
+*******************
+
+DATA PREPROCESSING
+*******************
+#IF DATA IS CATEGORICAL# *ONE HOT ENCODING* 
+#Encoding the Independent Variable#
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [0])], remainder='passthrough') #change accoridngly
+X = np.array(ct.fit_transform(X))
+
+#Encoding the Dependent Variable#
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+y = le.fit_transform(y)
+
+#MISSING DATA#
+from sklearn.impute import SimpleImputer
+imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+imputer.fit(X[:, 1:3]) #change accoridngly
+X[:, 1:3] = imputer.transform(X[:, 1:3]) #change accoridngly
+*******************
